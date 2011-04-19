@@ -93,3 +93,22 @@ func AnglesSpec(c gospec.Context) {
   })
 }
 
+func SegmentsSpec(c gospec.Context) {
+  s1 := linear.Seg2{{0,0}, {9,9}}
+  s2 := linear.Seg2{{0,2}, {7,2}}
+  s3 := linear.Seg2{{10,0}, {-10,-1}}
+  s4 := linear.Seg2{{-1,0}, {1,-1}}
+  c.Specify("Check that intersections are computed correctly.", func() {
+    i12,_ := s1.Isect(s2)
+    VecExpect(c, i12, IsWithin(1e-9), linear.Vec2{2,2})
+    i34,_ := s3.Isect(s4)
+    VecExpect(c, i34, IsWithin(1e-9), linear.Vec2{0,-0.5})
+  })
+  c.Specify("Check DistFromOrigin().", func() {
+    c.Expect(s1.DistFromOrigin(), IsWithin(1e-9), 0.0)
+    c.Expect(s2.DistFromOrigin(), IsWithin(1e-9), 2.0)
+    c.Expect(s3.DistFromOrigin(), IsWithin(1e-9), 0.499376169)
+    c.Expect(s4.DistFromOrigin(), IsWithin(1e-9), 0.447213595)
+  })
+}
+
