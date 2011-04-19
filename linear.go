@@ -4,6 +4,12 @@ import "math"
 
 type Vec2 [2]float64
 
+// Just for the sake of testing
+func (u Vec2) Equals(other interface{}) bool {
+  v := other.(Vec2)
+  return u[0] == v[0] && u[1] == v[1]
+}
+
 func (u Vec2) Add(v Vec2) Vec2 {
   return Vec2{ u[0]+v[0], u[1]+v[1] }
 }
@@ -42,6 +48,12 @@ func (u Vec2) Angle() float64 {
 
 type Seg2 [2]Vec2
 
+// Just for the sake of testing
+func (a Seg2) Equals(other interface{}) bool {
+  b := other.(Seg2)
+  return a[0].Equals(b[0]) && a[1].Equals(b[1])
+}
+
 func (a Seg2) Ray() Vec2 {
   return a[1].Sub(a[0])
 }
@@ -61,12 +73,44 @@ func (a Seg2) DistFromOrigin() float64 {
   return r.Mag()
 }
 
+// Returns true iff u lies to the left of a
 func (a Seg2) Left(u Vec2) bool {
   return a.Ray().Cross().Dot(u.Sub(a[0])) > 0
 }
 
+// Returns true iff u lies to the right of a
 func (a Seg2) Right(u Vec2) bool {
   return a.Ray().Cross().Dot(u.Sub(a[0])) < 0
 }
 
+
+// The vertices of a polygon should be in clockwise order
+type Poly []Vec2
+
+func (p Poly) visibility(u Vec2, f func(Seg2,Vec2) bool) []Seg2 {
+  segs := make([]Seg2, len(p))[0:0]
+  for i := 1; i < len(p); i++ {
+    s := Seg2{p[i-1],p[i]}
+    if f(s,u) {
+      segs = append(segs, s)
+    }
+  }
+  s := Seg2{p[len(p)-1], p[0]}
+  if f(s,u) {
+    segs = append(segs, s)
+  }
+  return segs
+}
+
+// Returns the set of line segments of p that might be visible from u,
+// assuming that u does not lie within p.
+func (p Poly) VisibleExterior(u Vec2) []Seg2 {
+  return p.visibility(u, func(s Seg2, v Vec2) bool { return s.Left(v) })
+}
+
+// Returns the set of line segments of p that might be visible from u,
+// assuming that u lies within p.
+func (p Poly) VisibleInterior(u Vec2) []Seg2 {
+  return p.visibility(u, func(s Seg2, v Vec2) bool { return s.Right(v) })
+}
 

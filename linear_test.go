@@ -131,3 +131,36 @@ func SegmentsSpec(c gospec.Context) {
   })
 }
 
+func PolySpec1(c gospec.Context) {
+  p := linear.Poly{
+    {0,0},
+    {-1,2},
+    {0,1},
+    {1,2},
+  }
+  c.Specify("Check that exterior and interior segments of a polygon are correctly identified.", func() {
+    visible_exterior := []linear.Seg2{ {{-1,2},{0,1}}, {{0,1},{1,2}} }
+    visible_interior := []linear.Seg2{ {{0,1},{1,2}}, {{1,2},{0,0}}, {{0,0},{-1,2}} }
+    c.Expect(p.VisibleExterior(linear.Vec2{0,2}), ContainsExactly, visible_exterior)
+    c.Expect(p.VisibleInterior(linear.Vec2{0.5,1.4}), ContainsExactly, visible_interior)
+  })
+}
+
+func PolySpec2(c gospec.Context) {
+  p := linear.Poly{
+    {-1,0},
+    {-3,0},
+    {0,10},
+    {3,0},
+    {1,0},
+    {2,1},
+    {-2,1},
+  }
+  c.Specify("Check that exterior and interior segments of a polygon are correctly identified.", func() {
+    visible_exterior := []linear.Seg2{ {{-1,0},{-3,0}}, {{2,1},{-2,1}}, {{3,0},{1,0}} }
+    visible_interior := []linear.Seg2{ {{2,1},{-2,1}}, {{-3,0},{0,10}}, {{0,10},{3,0}}, {{-1,0},{-3,0}}, {{3,0},{1,0}} }
+    c.Expect(p.VisibleExterior(linear.Vec2{0,-10}), ContainsExactly, visible_exterior)
+    c.Expect(p.VisibleInterior(linear.Vec2{0,5}), ContainsExactly, visible_interior)
+  })
+}
+
