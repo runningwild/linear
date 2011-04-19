@@ -61,4 +61,12 @@ func (a Seg2) DistFromOrigin() float64 {
   return r.Mag()
 }
 
+func (a Seg2) Left(u Vec2) bool {
+  return a.Ray().Cross().Dot(u.Sub(a[0])) > 0
+}
+
+func (a Seg2) Right(u Vec2) bool {
+  return a.Ray().Cross().Dot(u.Sub(a[0])) < 0
+}
+
 

@@ -98,6 +98,7 @@ func SegmentsSpec(c gospec.Context) {
   s2 := linear.Seg2{{0,2}, {7,2}}
   s3 := linear.Seg2{{10,0}, {-10,-1}}
   s4 := linear.Seg2{{-1,0}, {1,-1}}
+  s5 := linear.Seg2{{1000,1000}, {999,1001}}
   c.Specify("Check that intersections are computed correctly.", func() {
     i12,_ := s1.Isect(s2)
     VecExpect(c, i12, IsWithin(1e-9), linear.Vec2{2,2})
@@ -109,6 +110,24 @@ func SegmentsSpec(c gospec.Context) {
     c.Expect(s2.DistFromOrigin(), IsWithin(1e-9), 2.0)
     c.Expect(s3.DistFromOrigin(), IsWithin(1e-9), 0.499376169)
     c.Expect(s4.DistFromOrigin(), IsWithin(1e-9), 0.447213595)
+  })
+  c.Specify("Check Left() and Right().", func() {
+    c.Expect(s1.Left(linear.Vec2{0,1}), Equals, true)
+    c.Expect(s1.Right(linear.Vec2{0,1}), Equals, false)
+    c.Expect(s1.Left(linear.Vec2{1000,10000}), Equals, true)
+    c.Expect(s1.Right(linear.Vec2{1000,10000}), Equals, false)
+    c.Expect(s1.Left(linear.Vec2{0,-0.001}), Equals, false)
+    c.Expect(s1.Right(linear.Vec2{0,-0.001}), Equals, true)
+
+    c.Expect(s4.Left(linear.Vec2{0,0}), Equals, true)
+    c.Expect(s4.Right(linear.Vec2{0,0}), Equals, false)
+    c.Expect(s4.Left(linear.Vec2{0,-1000000}), Equals, false)
+    c.Expect(s4.Right(linear.Vec2{0,-1000000}), Equals, true)
+
+    c.Expect(s5.Left(linear.Vec2{999.5,1000.5001}), Equals, false)
+    c.Expect(s5.Right(linear.Vec2{999.5,1000.5001}), Equals, true)
+    c.Expect(s5.Left(linear.Vec2{999.5,1000.4999}), Equals, true)
+    c.Expect(s5.Right(linear.Vec2{999.5,1000.4999}), Equals, false)
   })
 }
 
