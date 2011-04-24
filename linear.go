@@ -61,11 +61,12 @@ func (a Seg2) Ray() Vec2 {
 // Returns a bool indicating whether or not the two line segments intersect
 // Returns a Vec2 indicating the intersection point if they intersect
 func (a Seg2) Isect(b Seg2) (Vec2,bool) {
-  a_to_b := b[0].Sub(a[0])
-  bx := b.Ray().Cross()
-  aray := a.Ray()
-  h := a_to_b.Dot(bx) / aray.Dot(bx)
-  return a[0].Add(aray.Scale(h)), true
+  by := b[1][1] - b[0][1]
+  bx := b[0][0] - b[1][0]
+  n := (b[0][0] - a[0][0]) * by + (b[0][1] - a[0][1]) * bx
+  d := (a[1][0] - a[0][0]) * by + (a[1][1] - a[0][1]) * bx
+  f := n/d
+  return Vec2{ a[0][0] + (a[1][0] - a[0][0]) * f, a[0][1] + (a[1][1] - a[0][1]) * f}, true
 }
 
 func (a Seg2) DistFromOrigin() float64 {
