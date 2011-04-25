@@ -164,3 +164,26 @@ func PolySpec2(c gospec.Context) {
   })
 }
 
+func PolySpec3(c gospec.Context) {
+  p := linear.Poly{
+    {0,0},
+    {0,1},
+    {1,1},
+    {1,0},
+  }
+  c.Specify("Check that Poly.Seg(i) returns the i-th segment.", func() {
+    s0 := linear.Seg2{ {0,0}, {0,1} }
+    VecExpect(c, p.Seg(0)[0], Equals, s0[0])
+    VecExpect(c, p.Seg(0)[1], Equals, s0[1])
+    s1 := linear.Seg2{ {0,1}, {1,1} }
+    VecExpect(c, p.Seg(1)[0], Equals, s1[0])
+    VecExpect(c, p.Seg(1)[1], Equals, s1[1])
+    s2 := linear.Seg2{ {1,1}, {1,0} }
+    VecExpect(c, p.Seg(2)[0], Equals, s2[0])
+    VecExpect(c, p.Seg(2)[1], Equals, s2[1])
+    s3 := linear.Seg2{ {1,0}, {0,0} }
+    VecExpect(c, p.Seg(3)[0], Equals, s3[0])
+    VecExpect(c, p.Seg(3)[1], Equals, s3[1])
+  })
+}
+

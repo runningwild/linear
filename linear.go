@@ -88,6 +88,10 @@ func (a Seg2) Right(u Vec2) bool {
 // The vertices of a polygon should be in clockwise order
 type Poly []Vec2
 
+func (p Poly) Seg(i int) Seg2 {
+  return Seg2{ p[i], p[(i+1) % len(p)] }
+}
+
 func (p Poly) visibility(u Vec2, f func(Seg2,Vec2) bool) []Seg2 {
   segs := make([]Seg2, len(p))[0:0]
   for i := 1; i < len(p); i++ {
