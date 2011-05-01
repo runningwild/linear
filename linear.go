@@ -58,19 +58,33 @@ func (a Seg2) Ray() Vec2 {
   return a[1].Sub(a[0])
 }
 
-// Returns a bool indicating whether or not the two line segments intersect
-// Returns a Vec2 indicating the intersection point if they intersect
-func (a Seg2) Isect(b Seg2) (Vec2,bool) {
+// Returns a Vec2 indicating the intersection point of the lines passing
+// through segments a and b
+func (a Seg2) Isect(b Seg2) Vec2 {
   by := b[1][1] - b[0][1]
   bx := b[0][0] - b[1][0]
   n := (b[0][0] - a[0][0]) * by + (b[0][1] - a[0][1]) * bx
   d := (a[1][0] - a[0][0]) * by + (a[1][1] - a[0][1]) * bx
   f := n/d
-  return Vec2{ a[0][0] + (a[1][0] - a[0][0]) * f, a[0][1] + (a[1][1] - a[0][1]) * f}, true
+  return Vec2{ a[0][0] + (a[1][0] - a[0][0]) * f, a[0][1] + (a[1][1] - a[0][1]) * f}
+}
+
+func (a Seg2) DoesIsect(b Seg2) bool {
+  isect := a.Isect(b)
+  m1 := isect.Sub(a[0]).Mag()
+  m2 := isect.Sub(a[1]).Mag()
+  m3 := a.Ray().Mag()
+  if m3 < m1 + m2 {
+    return false
+  }
+  m1 = isect.Sub(b[0]).Mag()
+  m2 = isect.Sub(b[1]).Mag()
+  m3 = b.Ray().Mag()
+  return m1 + m2 <= m3
 }
 
 func (a Seg2) DistFromOrigin() float64 {
-  r,_ := Seg2{a.Ray().Cross(),Vec2{0,0}}.Isect(a)
+  r := Seg2{a.Ray().Cross(),Vec2{0,0}}.Isect(a)
   return r.Mag()
 }
 

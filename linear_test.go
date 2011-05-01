@@ -100,9 +100,9 @@ func SegmentsSpec(c gospec.Context) {
   s4 := linear.Seg2{{-1,0}, {1,-1}}
   s5 := linear.Seg2{{1000,1000}, {999,1001}}
   c.Specify("Check that intersections are computed correctly.", func() {
-    i12,_ := s1.Isect(s2)
+    i12 := s1.Isect(s2)
     VecExpect(c, i12, IsWithin(1e-9), linear.Vec2{2,2})
-    i34,_ := s3.Isect(s4)
+    i34 := s3.Isect(s4)
     VecExpect(c, i34, IsWithin(1e-9), linear.Vec2{0,-0.5})
   })
   c.Specify("Check DistFromOrigin().", func() {
@@ -128,6 +128,27 @@ func SegmentsSpec(c gospec.Context) {
     c.Expect(s5.Right(linear.Vec2{999.5,1000.5001}), Equals, true)
     c.Expect(s5.Left(linear.Vec2{999.5,1000.4999}), Equals, true)
     c.Expect(s5.Right(linear.Vec2{999.5,1000.4999}), Equals, false)
+  })
+}
+
+func SegmentsSpec2(c gospec.Context) {
+  s1 := linear.Seg2{{0,0}, {9,9}}
+  s2 := linear.Seg2{{0,5}, {10,5}}
+  s3 := linear.Seg2{{-10,10}, {-20,10}}
+  s4 := linear.Seg2{{-15,10000}, {-15,-10000}}
+  c.Specify("Check function that determines whether  or not segments intersect.", func() {
+    c.Expect(s1.DoesIsect(s2), Equals, true)
+    c.Expect(s2.DoesIsect(s1), Equals, true)
+    c.Expect(s3.DoesIsect(s4), Equals, true)
+    c.Expect(s4.DoesIsect(s3), Equals, true)
+    c.Expect(s1.DoesIsect(s3), Equals, false)
+    c.Expect(s1.DoesIsect(s4), Equals, false)
+    c.Expect(s2.DoesIsect(s3), Equals, false)
+    c.Expect(s2.DoesIsect(s4), Equals, false)
+    c.Expect(s3.DoesIsect(s1), Equals, false)
+    c.Expect(s3.DoesIsect(s2), Equals, false)
+    c.Expect(s4.DoesIsect(s1), Equals, false)
+    c.Expect(s4.DoesIsect(s2), Equals, false)
   })
 }
 

@@ -12,6 +12,7 @@ func TestAllSpecs(t *testing.T) {
   r.AddSpec(BasicPropertiesSpec)
   r.AddSpec(AnglesSpec)
   r.AddSpec(SegmentsSpec)
+  r.AddSpec(SegmentsSpec2)
   r.AddSpec(PolySpec1)
   r.AddSpec(PolySpec2)
   gospec.MainGoTest(r, t)
