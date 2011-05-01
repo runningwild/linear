@@ -74,13 +74,13 @@ func (a Seg2) DoesIsect(b Seg2) bool {
   m1 := isect.Sub(a[0]).Mag()
   m2 := isect.Sub(a[1]).Mag()
   m3 := a.Ray().Mag()
-  if m3 < m1 + m2 {
+  if m3 + 1e-5 < m1 + m2 {
     return false
   }
   m1 = isect.Sub(b[0]).Mag()
   m2 = isect.Sub(b[1]).Mag()
   m3 = b.Ray().Mag()
-  return m1 + m2 <= m3
+  return m1 + m2 <= m3 + 1e-5
 }
 
 func (a Seg2) DistFromOrigin() float64 {
