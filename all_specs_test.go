@@ -8,6 +8,7 @@ import (
 func TestAllSpecs(t *testing.T) {
   r := gospec.NewRunner()
   r.AddSpec(BasicOperationsSpec)
+  r.AddSpec(ComplexOperationsSpec)
   r.AddSpec(BasicPropertiesSpec)
   r.AddSpec(AnglesSpec)
   r.AddSpec(SegmentsSpec)

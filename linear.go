@@ -51,6 +51,12 @@ func (u Vec2) Scale(scale float64) Vec2 {
 func (u Vec2) Angle() float64 {
   return math.Atan2(u.Y, u.X)
 }
+func (u Vec2) DistToLine(s Seg2) float64 {
+  q := s.Ray().Cross()
+  t := Seg2{u, q.Add(u)}
+  sect := s.Isect(t)
+  return sect.Sub(u).Mag()
+}
 
 type Seg2 struct {
   P, Q Vec2

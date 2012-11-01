@@ -3,6 +3,7 @@ package linear_test
 import (
   "github.com/orfjackal/gospec/src/gospec"
   . "github.com/orfjackal/gospec/src/gospec"
+  "math"
   "runningwild/linear"
 )
 
@@ -54,6 +55,37 @@ func BasicPropertiesSpec(c gospec.Context) {
   })
   c.Specify("Check that a-(a-b) == b.", func() {
     VecExpect(c, a.Sub(a.Sub(b)), IsWithin(1e-9), b)
+  })
+}
+
+func ComplexOperationsSpec(c gospec.Context) {
+  c.Specify("Vec2.DistToLine() works.", func() {
+    centers := []linear.Vec2{
+      linear.Vec2{10, 12},
+      linear.Vec2{1, -9},
+      linear.Vec2{-100, -42},
+      linear.Vec2{0, 1232},
+    }
+    radiuses := []float64{3, 10.232, 435, 1}
+    thetas := []float64{0.001, 0.1, 1, 1.01, 0.034241, 0.789, 90, 179, 180}
+    angles := []float64{1.01, 1.0, 1.11111, 930142}
+    for _, center := range centers {
+      for _, radius := range radiuses {
+        for _, angle := range angles {
+          for _, theta := range thetas {
+            a := linear.Vec2{math.Cos(angle), math.Sin(angle)}
+            b := linear.Vec2{math.Cos(angle + theta), math.Sin(angle + theta)}
+            seg := linear.Seg2{a.Scale(radius).Add(center), b.Scale(radius).Add(center)}
+            dist := center.DistToLine(seg)
+            real_dist := radius * math.Cos(theta/2)
+            if real_dist < 0 {
+              real_dist = -real_dist
+            }
+            c.Expect(dist, IsWithin(1e-9), real_dist)
+          }
+        }
+      }
+    }
   })
 }
 
