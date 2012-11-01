@@ -1,10 +1,9 @@
 package linear_test
 
 import (
-  "gospec"
+  "github.com/orfjackal/gospec/src/gospec"
   "testing"
 )
-
 
 func TestAllSpecs(t *testing.T) {
   r := gospec.NewRunner()
@@ -15,6 +14,6 @@ func TestAllSpecs(t *testing.T) {
   r.AddSpec(SegmentsSpec2)
   r.AddSpec(PolySpec1)
   r.AddSpec(PolySpec2)
+  r.AddSpec(TriangleSpec)
   gospec.MainGoTest(r, t)
 }
-
