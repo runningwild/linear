@@ -57,6 +57,15 @@ func (u Vec2) DistToLine(s Seg2) float64 {
   sect := s.Isect(t)
   return sect.Sub(u).Mag()
 }
+func (u Vec2) Rotate(angle float64) Vec2 {
+  return Vec2{
+    X: u.X*math.Cos(angle) - u.Y*math.Sin(angle),
+    Y: u.X*math.Sin(angle) + u.Y*math.Cos(angle),
+  }
+}
+func (u Vec2) RotateAround(v Vec2, angle float64) Vec2 {
+  return u.Sub(v).Rotate(angle).Add(v)
+}
 
 type Seg2 struct {
   P, Q Vec2

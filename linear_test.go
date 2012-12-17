@@ -3,8 +3,8 @@ package linear_test
 import (
   "github.com/orfjackal/gospec/src/gospec"
   . "github.com/orfjackal/gospec/src/gospec"
+  "github.com/runningwild/linear"
   "math"
-  "runningwild/linear"
 )
 
 type gospecEval func(interface{}, interface{}) (bool, gospec.Message, gospec.Message, error)
