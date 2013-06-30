@@ -173,6 +173,10 @@ func SegmentsSpec2(c gospec.Context) {
 	s2 := linear.MakeSeg2(0, 5, 10, 5)
 	s3 := linear.MakeSeg2(-10, 10, -20, 10)
 	s4 := linear.MakeSeg2(-15, 10000, -15, -10000)
+	s5 := linear.MakeSeg2(0, 1, 1, 0)
+	s6 := linear.MakeSeg2(0.4, 0.4, 0.6, 0.6)
+	s7 := linear.MakeSeg2(0.5, 0.5, 0.6, 0.6)
+	s8 := linear.MakeSeg2(0.4, 0.4, 0.5, 0.5)
 	c.Specify("Check function that determines whether  or not segments intersect.", func() {
 		c.Expect(s1.DoesIsect(s2), Equals, true)
 		c.Expect(s2.DoesIsect(s1), Equals, true)
@@ -186,6 +190,12 @@ func SegmentsSpec2(c gospec.Context) {
 		c.Expect(s3.DoesIsect(s2), Equals, false)
 		c.Expect(s4.DoesIsect(s1), Equals, false)
 		c.Expect(s4.DoesIsect(s2), Equals, false)
+		c.Expect(s5.DoesIsect(s6), Equals, true)
+		c.Expect(s5.DoesIsect(s7), Equals, false)
+		c.Expect(s5.DoesIsect(s8), Equals, false)
+		c.Expect(s6.DoesIsect(s5), Equals, true)
+		c.Expect(s7.DoesIsect(s5), Equals, false)
+		c.Expect(s8.DoesIsect(s5), Equals, false)
 	})
 }
 
