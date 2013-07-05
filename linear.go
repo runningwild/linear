@@ -195,3 +195,13 @@ func convexPolysDisjointOneWay(a, b Poly) bool {
 func ConvexPolysOverlap(a, b Poly) bool {
 	return !convexPolysDisjointOneWay(a, b) && !convexPolysDisjointOneWay(b, a)
 }
+
+func VecInsideConvexPoly(vec Vec2, poly Poly) bool {
+	for i := range poly {
+		seg := poly.Seg(i)
+		if seg.Left(vec) {
+			return false
+		}
+	}
+	return true
+}
