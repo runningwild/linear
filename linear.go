@@ -57,6 +57,12 @@ func (u Vec2) DistToLine(s Seg2) float64 {
 	sect := s.Isect(t)
 	return sect.Sub(u).Mag()
 }
+func (u Vec2) DistSquaredToLine(s Seg2) float64 {
+	q := s.Ray().Cross()
+	t := Seg2{u, q.Add(u)}
+	sect := s.Isect(t)
+	return sect.Sub(u).Mag2()
+}
 func (u Vec2) Rotate(angle float64) Vec2 {
 	return Vec2{
 		X: u.X*math.Cos(angle) - u.Y*math.Sin(angle),
