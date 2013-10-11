@@ -142,6 +142,13 @@ func (p Poly) Seg(i int) Seg2 {
 	return Seg2{p[i], p[(i+1)%len(p)]}
 }
 
+func (p Poly) IsClockwise() bool {
+	return p.Seg(0).Right(p[2])
+}
+func (p Poly) IsCounterClockwise() bool {
+	return p.Seg(0).Left(p[2])
+}
+
 func (p Poly) visibility(u Vec2, f func(Seg2, Vec2) bool) []Seg2 {
 	segs := make([]Seg2, len(p))[0:0]
 	for i := 1; i < len(p); i++ {
