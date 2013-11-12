@@ -120,6 +120,11 @@ func (a Seg2) DoesIsect(b Seg2) bool {
 		(a.Left(b.P) && a.Right(b.Q) || a.Left(b.Q) && a.Right(b.P))
 }
 
+func (a Seg2) DoesIsectOrTouch(b Seg2) bool {
+	return ((!b.Right(a.P) && !b.Left(a.Q)) || (!b.Right(a.Q) && !b.Left(a.P))) &&
+		((!a.Right(b.P) && !a.Left(b.Q)) || (!a.Right(b.Q) && !a.Left(b.P)))
+}
+
 func (a Seg2) DistFromOrigin() float64 {
 	r := Seg2{a.Ray().Cross(), Vec2{0, 0}}.Isect(a)
 	return r.Mag()

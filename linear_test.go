@@ -177,7 +177,7 @@ func SegmentsSpec2(c gospec.Context) {
 	s6 := linear.MakeSeg2(0.4, 0.4, 0.6, 0.6)
 	s7 := linear.MakeSeg2(0.5, 0.5, 0.6, 0.6)
 	s8 := linear.MakeSeg2(0.4, 0.4, 0.5, 0.5)
-	c.Specify("Check function that determines whether  or not segments intersect.", func() {
+	c.Specify("Check function that determines whether or not segments intersect.", func() {
 		c.Expect(s1.DoesIsect(s2), Equals, true)
 		c.Expect(s2.DoesIsect(s1), Equals, true)
 		c.Expect(s3.DoesIsect(s4), Equals, true)
@@ -196,6 +196,21 @@ func SegmentsSpec2(c gospec.Context) {
 		c.Expect(s6.DoesIsect(s5), Equals, true)
 		c.Expect(s7.DoesIsect(s5), Equals, false)
 		c.Expect(s8.DoesIsect(s5), Equals, false)
+	})
+	t0 := linear.MakeSeg2(0, 0, 5, 5)
+	t1 := linear.MakeSeg2(0, 10, 10, 0)
+	t2 := linear.MakeSeg2(0, 0, 4.99, 4.99)
+	c.Specify("Check function that determines whether or not segments intersect or touch.", func() {
+		// Should return true for everything that DoesIsect returns true for.
+		c.Expect(s1.DoesIsectOrTouch(s2), Equals, true)
+		c.Expect(s2.DoesIsectOrTouch(s1), Equals, true)
+		c.Expect(s3.DoesIsectOrTouch(s4), Equals, true)
+		c.Expect(s4.DoesIsectOrTouch(s3), Equals, true)
+		c.Expect(s5.DoesIsectOrTouch(s6), Equals, true)
+		c.Expect(s6.DoesIsectOrTouch(s5), Equals, true)
+
+		c.Expect(t0.DoesIsectOrTouch(t1), Equals, true)
+		c.Expect(t2.DoesIsectOrTouch(t1), Equals, false)
 	})
 }
 
