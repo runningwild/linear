@@ -115,14 +115,47 @@ func (a Seg2) RelIsect(b Seg2) float64 {
 	return n / d
 }
 
-func (a Seg2) DoesIsect(b Seg2) bool {
-	return (b.Left(a.P) && b.Right(a.Q) || b.Left(a.Q) && b.Right(a.P)) &&
-		(a.Left(b.P) && a.Right(b.Q) || a.Left(b.Q) && a.Right(b.P))
+// Cross product of two 2D vectors.
+func CrossProduct(a, b Vec2) float64 {
+  return a.X * b.Y - a.Y * b.X
 }
 
+// Returns true iff the two segments cross each other.
+func (a Seg2) DoesIsect(b Seg2) bool {
+  aray := a.Ray()
+  bray := b.Ray()
+
+  bp := b.P.Sub(a.P)
+  bq := b.Q.Sub(a.P)
+  ap := a.P.Sub(b.P)
+  aq := a.Q.Sub(b.P)
+
+  cross_bp := CrossProduct(aray, bp)
+  cross_bq := CrossProduct(aray, bq)
+  cross_ap := CrossProduct(bray, ap)
+  cross_aq := CrossProduct(bray, aq)
+
+  return ((cross_ap < 0 && cross_aq > 0) || (cross_ap > 0 && cross_aq < 0)) &&
+         ((cross_bp < 0 && cross_bq > 0) || (cross_bp > 0 && cross_bq < 0))
+}
+
+// Returns true iff the two segments cross or touch each other.
 func (a Seg2) DoesIsectOrTouch(b Seg2) bool {
-	return ((!b.Right(a.P) && !b.Left(a.Q)) || (!b.Right(a.Q) && !b.Left(a.P))) &&
-		((!a.Right(b.P) && !a.Left(b.Q)) || (!a.Right(b.Q) && !a.Left(b.P)))
+  aray := a.Ray()
+  bray := b.Ray()
+
+  bp := b.P.Sub(a.P)
+  bq := b.Q.Sub(a.P)
+  ap := a.P.Sub(b.P)
+  aq := a.Q.Sub(b.P)
+
+  cross_bp := CrossProduct(aray, bp)
+  cross_bq := CrossProduct(aray, bq)
+  cross_ap := CrossProduct(bray, ap)
+  cross_aq := CrossProduct(bray, aq)
+
+  return ((cross_ap <= 0 && cross_aq >= 0) || (cross_ap >= 0 && cross_aq <= 0)) &&
+         ((cross_bp <= 0 && cross_bq >= 0) || (cross_bp >= 0 && cross_bq <= 0))
 }
 
 func (a Seg2) DistFromOrigin() float64 {
